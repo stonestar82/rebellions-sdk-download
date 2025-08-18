@@ -51,7 +51,7 @@ try:
 		
 
 	## 기존 SDK 삭제
-	sdk_file = glob.glob(f"{NFS_SDK_PATH}/rebellion_sdk_compiler-*.tar")
+	sdk_file = glob.glob(f"{NFS_SDK_PATH}/rebellions_sdk_compiler-*.tar")
 
 	if len(sdk_file) > 0:
 		## 파일 삭제

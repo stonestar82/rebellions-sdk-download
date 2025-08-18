@@ -176,7 +176,7 @@ os.system(f"chmod +x {NFS_SDK_PATH}/install_sdk.sh")
 
 
 ## pip.tar install_sdk.sh 압축
-cmd = f"tar -cf {NFS_SDK_PATH}/rebellion_sdk_compiler-{compiler_version}_optimum-{optimum_version}_vllm-{vllm_version}.tar {NFS_SDK_PATH}/pip.tar {NFS_SDK_PATH}/install_sdk.sh"
+cmd = f"tar -cf {NFS_SDK_PATH}/rebellions_sdk_compiler-{compiler_version}_optimum-{optimum_version}_vllm-{vllm_version}.tar {NFS_SDK_PATH}/pip.tar {NFS_SDK_PATH}/install_sdk.sh"
 print(cmd)
 
 ## cmd 실행
