@@ -4,7 +4,7 @@ from datetime import datetime
 import os, time
 import glob
 from jinja2 import Template
-from sdk_common import DEFAULT_PATH, NFS_SDK_PATH
+from sdk_common import NFS_SDK_PATH, REBELLIONS_ID, REBELLIONS_PW
 
 print("============================================================================")
 print("rebellion studio sdk downloader")
@@ -29,7 +29,7 @@ print(f"compiler sdk download start : v{compiler_version}")
 print("============================================================================")
 
 
-cmd = f"pip3 download --extra-index-url https://pks:c5JLk479m@pypi.rbln.ai/simple rebel-compiler=={compiler_version} -d {NFS_SDK_PATH}/pip"
+cmd = f"pip3 download --extra-index-url https://{REBELLIONS_ID}:{REBELLIONS_PW}@pypi.rbln.ai/simple rebel-compiler=={compiler_version} -d {NFS_SDK_PATH}/pip"
 
 # print(cmd)
 
@@ -56,7 +56,7 @@ print("=========================================================================
 print(f"optimum sdk download start : v{optimum_version}")
 print("============================================================================")
 
-cmd = f"pip3 download --extra-index-url https://pks:c5JLk479m@pypi.rbln.ai/simple optimum-rbln=={optimum_version} -d {NFS_SDK_PATH}/pip"
+cmd = f"pip3 download --extra-index-url https://{REBELLIONS_ID}:{REBELLIONS_PW}@pypi.rbln.ai/simple optimum-rbln=={optimum_version} -d {NFS_SDK_PATH}/pip"
 
 # print(cmd)
 
@@ -80,7 +80,7 @@ print("")
 print("============================================================================")
 print(f"vllm sdk download start : v{vllm_version}")
 print("============================================================================")
-cmd = f"pip3 download --extra-index-url https://pks:c5JLk479m@pypi.rbln.ai/simple vllm-rbln=={vllm_version} -d {NFS_SDK_PATH}/pip"
+cmd = f"pip3 download --extra-index-url https://{REBELLIONS_ID}:{REBELLIONS_PW}@pypi.rbln.ai/simple vllm-rbln=={vllm_version} -d {NFS_SDK_PATH}/pip"
 # print(cmd)
 
 ## cmd 실행

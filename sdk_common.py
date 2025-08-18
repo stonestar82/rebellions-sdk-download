@@ -1,5 +1,5 @@
 DEFAULT_PATH = "/workspace/rebellions_sdk_download"
 NFS_SDK_PATH = "/srv/nfs/share/SDK"
 ERROR_FILE_NAME = "crawling_error"
-REBELLIONS_ID = "rebellion"
-REBELLIONS_PW = "rebellion"
+REBELLIONS_ID = "pks"
+REBELLIONS_PW = "c5JLk479m"
