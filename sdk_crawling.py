@@ -31,7 +31,7 @@ try:
 	vllm_version = td[4].text.strip().replace('v', '')
 
 	file_name = f"release_{release_date}_{driver_version}_{compiler_version}_{optimum_version}_{vllm_version}.txt"
-	sdk_name = f"rebellion_sdk_compiler-{compiler_version}_optimum-{optimum_version}_vllm-{vllm_version}.tar"
+	sdk_name = f"rebellions_sdk_compiler-{compiler_version}_optimum-{optimum_version}_vllm-{vllm_version}.tar"
 
 	if os.path.exists(f"{NFS_SDK_PATH}/{file_name}"):
 		print(f"file already exists : {file_name}")
