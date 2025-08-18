@@ -16,7 +16,7 @@
 ## 📁 프로젝트 구조
 
 ```
-rebellions-install/
+rebellions-sdk-download/
 ├── README.md              # 프로젝트 설명서
 ├── sdk_common.py          # 공통 설정 및 상수
 ├── sdk_crawling.py        # 메인 크롤링 스크립트
