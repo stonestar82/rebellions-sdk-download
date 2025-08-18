@@ -1,0 +1,5 @@
+DEFAULT_PATH = "/srv/nfs/share/SDK"
+NFS_SDK_PATH = "/srv/nfs/share/SDK"
+ERROR_FILE_NAME = "crawling_error"
+REBELLIONS_ID = "rebellion"
+REBELLIONS_PW = "rebellion"
