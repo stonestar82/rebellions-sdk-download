@@ -4,7 +4,7 @@ from datetime import datetime
 import os, time
 import glob
 from jinja2 import Template
-from sdk_common import DEFAULT_PATH
+from sdk_common import DEFAULT_PATH, NFS_SDK_PATH
 
 print("============================================================================")
 print("rebellion studio sdk downloader")
@@ -29,7 +29,7 @@ print(f"compiler sdk download start : v{compiler_version}")
 print("============================================================================")
 
 
-cmd = f"pip3 download --extra-index-url https://pks:c5JLk479m@pypi.rbln.ai/simple rebel-compiler=={compiler_version} -d {DEFAULT_PATH}/pip"
+cmd = f"pip3 download --extra-index-url https://pks:c5JLk479m@pypi.rbln.ai/simple rebel-compiler=={compiler_version} -d {NFS_SDK_PATH}/pip"
 
 # print(cmd)
 
@@ -41,7 +41,7 @@ time.sleep(1)
 ## find compiler sdk file
 ## rebel_compiler-0.8.2-cp310-cp310-manylinux_2_28_x86_64.whl 정규식으로 찾기
 
-compiler_sdk_file = glob.glob(f"{DEFAULT_PATH}/pip/rebel_compiler-{compiler_version}-*.whl")
+compiler_sdk_file = glob.glob(f"{NFS_SDK_PATH}/pip/rebel_compiler-{compiler_version}-*.whl")
 
 if len(compiler_sdk_file) == 0:
     print(f"compiler sdk file not found : {compiler_sdk_file}")
@@ -56,7 +56,7 @@ print("=========================================================================
 print(f"optimum sdk download start : v{optimum_version}")
 print("============================================================================")
 
-cmd = f"pip3 download --extra-index-url https://pks:c5JLk479m@pypi.rbln.ai/simple optimum-rbln=={optimum_version} -d {DEFAULT_PATH}/pip"
+cmd = f"pip3 download --extra-index-url https://pks:c5JLk479m@pypi.rbln.ai/simple optimum-rbln=={optimum_version} -d {NFS_SDK_PATH}/pip"
 
 # print(cmd)
 
@@ -67,7 +67,7 @@ time.sleep(1)
 
 ## find optimum sdk file
 ## optimum_rbln-0.8.2-py3-none-any.whl 정규식으로 찾기
-optimum_sdk_file = glob.glob(f"{DEFAULT_PATH}/pip/optimum_rbln-{optimum_version}-*.whl")
+optimum_sdk_file = glob.glob(f"{NFS_SDK_PATH}/pip/optimum_rbln-{optimum_version}-*.whl")
 
 if len(optimum_sdk_file) == 0:
     print(f"optimum sdk file not found : {optimum_sdk_file}")
@@ -80,7 +80,7 @@ print("")
 print("============================================================================")
 print(f"vllm sdk download start : v{vllm_version}")
 print("============================================================================")
-cmd = f"pip3 download --extra-index-url https://pks:c5JLk479m@pypi.rbln.ai/simple vllm-rbln=={vllm_version} -d {DEFAULT_PATH}/pip"
+cmd = f"pip3 download --extra-index-url https://pks:c5JLk479m@pypi.rbln.ai/simple vllm-rbln=={vllm_version} -d {NFS_SDK_PATH}/pip"
 # print(cmd)
 
 ## cmd 실행
@@ -88,7 +88,7 @@ os.system(cmd)
 time.sleep(1)
 ## find vllm sdk file
 ## vllm_rbln-0.8.2-py3-none-any.whl 정규식으로 찾기
-vllm_sdk_file = glob.glob(f"{DEFAULT_PATH}/pip/vllm_rbln-{vllm_version}-*.whl")
+vllm_sdk_file = glob.glob(f"{NFS_SDK_PATH}/pip/vllm_rbln-{vllm_version}-*.whl")
 
 if len(vllm_sdk_file) == 0:
 	print(f"vllm sdk file not found : {vllm_sdk_file}")
@@ -105,7 +105,7 @@ print("tar file create start")
 print("============================================================================")
 
 
-cmd = f"tar -cf {DEFAULT_PATH}/pip.tar {DEFAULT_PATH}/pip/*"
+cmd = f"tar -cf {NFS_SDK_PATH}/pip.tar {NFS_SDK_PATH}/pip/*"
 
 print(cmd)
 
@@ -135,17 +135,17 @@ tar -xf pip.tar
 echo ""
 echo "rebellion compiler install"
 sleep 3
-pip install {{ COMPILER_SDK_FILE }} -f {{ DEFAULT_PATH }}/pip --no-index
+pip install {{ COMPILER_SDK_FILE }} -f {{ NFS_SDK_PATH }}/pip --no-index
 
 echo ""
 echo "optimum install"
 sleep 3
-pip install {{ OPTIMUM_SDK_FILE }} -f {{ DEFAULT_PATH }}/pip --no-index
+pip install {{ OPTIMUM_SDK_FILE }} -f {{ NFS_SDK_PATH }}/pip --no-index
 
 echo ""
 echo "vllm install"
 sleep 3
-pip install {{ VLLM_SDK_FILE }} -f {{ DEFAULT_PATH }}/pip --no-index
+pip install {{ VLLM_SDK_FILE }} -f {{ NFS_SDK_PATH }}/pip --no-index
 
 echo ""
 echo "============================================================================"
@@ -164,19 +164,19 @@ data = {
 	"COMPILER_SDK_FILE": compiler_sdk_file,
 	"OPTIMUM_SDK_FILE": optimum_sdk_file,
 	"VLLM_SDK_FILE": vllm_sdk_file,
-	"DEFAULT_PATH": DEFAULT_PATH
+	"NFS_SDK_PATH": NFS_SDK_PATH
 }
 
 
-with open(f"{DEFAULT_PATH}/install_sdk.sh", "w") as f:
+with open(f"{NFS_SDK_PATH}/install_sdk.sh", "w") as f:
     f.write(t.render(**data))
 
-os.system(f"chmod +x {DEFAULT_PATH}/install_sdk.sh")	
+os.system(f"chmod +x {NFS_SDK_PATH}/install_sdk.sh")	
 
 
 
 ## pip.tar install_sdk.sh 압축
-cmd = f"tar -cf {DEFAULT_PATH}/rebellion_sdk_compiler-{compiler_version}_optimum-{optimum_version}_vllm-{vllm_version}.tar {DEFAULT_PATH}/pip.tar {DEFAULT_PATH}/install_sdk.sh"
+cmd = f"tar -cf {NFS_SDK_PATH}/rebellion_sdk_compiler-{compiler_version}_optimum-{optimum_version}_vllm-{vllm_version}.tar {NFS_SDK_PATH}/pip.tar {NFS_SDK_PATH}/install_sdk.sh"
 print(cmd)
 
 ## cmd 실행
@@ -184,7 +184,7 @@ os.system(cmd)
 
 time.sleep(1)
 
-cmd = f"rm -rf {DEFAULT_PATH}/pip {DEFAULT_PATH}/pip.tar {DEFAULT_PATH}/install_sdk.sh"
+cmd = f"rm -rf {NFS_SDK_PATH}/pip {NFS_SDK_PATH}/pip.tar {NFS_SDK_PATH}/install_sdk.sh"
 os.system(cmd)
 
 print("")

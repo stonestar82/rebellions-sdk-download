@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import subprocess, os, glob
-from sdk_common import DEFAULT_PATH
+from sdk_common import DEFAULT_PATH, NFS_SDK_PATH
 
 ERROR_FILE_NAME = "crawling_error"
 
@@ -33,16 +33,16 @@ try:
 	file_name = f"release_{release_date}_{driver_version}_{compiler_version}_{optimum_version}_{vllm_version}.txt"
 	sdk_name = f"rebellion_sdk_compiler-{compiler_version}_optimum-{optimum_version}_vllm-{vllm_version}.tar"
 
-	if os.path.exists(f"{DEFAULT_PATH}/{file_name}"):
+	if os.path.exists(f"{NFS_SDK_PATH}/{file_name}"):
 		print(f"file already exists : {file_name}")
 		
-		if os.path.exists(f"{DEFAULT_PATH}/{sdk_name}"):
+		if os.path.exists(f"{NFS_SDK_PATH}/{sdk_name}"):
 			print(f"sdk already exists : {sdk_name}")
 			exit()
 		
 
 	## release_*.txt 파일 찾기
-	release_file = glob.glob(f"{DEFAULT_PATH}/release_*.txt")
+	release_file = glob.glob(f"{NFS_SDK_PATH}/release_*.txt")
 
 	if len(release_file) > 0:
 		## 파일 삭제
@@ -51,7 +51,7 @@ try:
 		
 
 	## 기존 SDK 삭제
-	sdk_file = glob.glob(f"{DEFAULT_PATH}/rebellion_sdk_compiler-*.tar")
+	sdk_file = glob.glob(f"{NFS_SDK_PATH}/rebellion_sdk_compiler-*.tar")
 
 	if len(sdk_file) > 0:
 		## 파일 삭제
@@ -61,7 +61,7 @@ try:
 
 
 
-	with open(f"{DEFAULT_PATH}/{file_name}", "w", encoding="utf-8") as f:
+	with open(f"{NFS_SDK_PATH}/{file_name}", "w", encoding="utf-8") as f:
 		f.write(f"release\t\t\t{release_date}\n")
 		f.write(f"driver_version\t\t{driver_version}\n")
 		f.write(f"compiler_version\t{compiler_version}\n")
@@ -76,14 +76,14 @@ try:
 	subprocess.run(cmd, shell=True)
 
 
-	if os.path.exists(f"{DEFAULT_PATH}/{ERROR_FILE_NAME}"):
+	if os.path.exists(f"{NFS_SDK_PATH}/{ERROR_FILE_NAME}"):
  
-		os.remove(f"{DEFAULT_PATH}/{ERROR_FILE_NAME}")
+		os.remove(f"{NFS_SDK_PATH}/{ERROR_FILE_NAME}")
  
 
 except Exception as e:
 	
-	with open(f"{DEFAULT_PATH}/{ERROR_FILE_NAME}", "w", encoding="utf-8") as f:
+	with open(f"{NFS_SDK_PATH}/{ERROR_FILE_NAME}", "w", encoding="utf-8") as f:
 		f.write(f"{e}\n")
 
 	exit()
