@@ -76,9 +76,7 @@ with open("sdk_init.sh", "w", encoding="utf-8") as f:
 	f.write(t.render(DEFAULT_PATH=DEFAULT_PATH, PYTHON_VERSIONS=PYTHON_VERSIONS))
 
 
-# Windows에서는 chmod가 필요하지 않음
-if os.name != 'nt':  # Unix/Linux/Mac
-    os.system("chmod +x sdk_init.sh")
+os.system("chmod +x sdk_init.sh")
 
 
 
@@ -396,9 +394,7 @@ with open("download", "r", encoding="utf-8") as f:
 with open("download.sh", "w", encoding="utf-8") as f:
     f.write(r)
 
-# Windows에서는 chmod가 필요하지 않음
-if os.name != 'nt':  # Unix/Linux/Mac
-    os.system("chmod +x download.sh")
+os.system("chmod +x download.sh")
 
 
 print("sdk_init.sh, download.sh create complete")

@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import subprocess, os, glob
+import os, glob
 from sdk_common import DEFAULT_PATH, NFS_SDK_PATH
 
 ERROR_FILE_NAME = "crawling_error"
