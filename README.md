@@ -34,6 +34,10 @@ rebellions-sdk-download/
 | `REBELLIONS_ID` | 리벨리온 계정 ID       | `your_id`         |
 | `REBELLIONS_PW` | 리벨리온 계정 비밀번호 | `your_password`   |
 
+### sdk_init.py 실행
+
+### sdk_init.sh 실행
+
 ## 🎯 사용 방법
 
 ### 1. 자동 실행 (권장)

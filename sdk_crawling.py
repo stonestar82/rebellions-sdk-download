@@ -31,15 +31,10 @@ try:
 	vllm_version = td[4].text.strip().replace('v', '')
 
 	file_name = f"release_{release_date}_{driver_version}_{compiler_version}_{optimum_version}_{vllm_version}.txt"
-	sdk_name = f"rebellions_sdk_compiler-{compiler_version}_optimum-{optimum_version}_vllm-{vllm_version}.tar"
 
 	if os.path.exists(f"{NFS_SDK_PATH}/{file_name}"):
 		print(f"file already exists : {file_name}")
-		
-		if os.path.exists(f"{NFS_SDK_PATH}/{sdk_name}"):
-			print(f"sdk already exists : {sdk_name}")
-			exit()
-		
+		exit()
 
 	## release_*.txt 파일 찾기
 	release_file = glob.glob(f"{NFS_SDK_PATH}/release_*.txt")
@@ -51,7 +46,7 @@ try:
 		
 
 	## 기존 SDK 삭제
-	sdk_file = glob.glob(f"{NFS_SDK_PATH}/rebellions_sdk_compiler-*.tar")
+	sdk_file = glob.glob(f"{NFS_SDK_PATH}/rebellions_sdk_*.tar")
 
 	if len(sdk_file) > 0:
 		## 파일 삭제
@@ -67,19 +62,21 @@ try:
 		f.write(f"compiler_version\t{compiler_version}\n")
 		f.write(f"optimum_version\t\t{optimum_version}\n")
 		f.write(f"vllm_version\t\t{vllm_version}\n")
-
-
-
-	cmd = f"/usr/bin/python3 {DEFAULT_PATH}/sdk_download.py {compiler_version} {optimum_version} {vllm_version}"
-
-
-	subprocess.run(cmd, shell=True)
+  
+  
+	with open(f"{NFS_SDK_PATH}/release_info.txt", "w", encoding="utf-8") as f:
+		f.write(f"release={release_date}\n")
+		f.write(f"driver_version={driver_version}\n")
+		f.write(f"compiler_version={compiler_version}\n")
+		f.write(f"optimum_version={optimum_version}\n")
+		f.write(f"vllm_version={vllm_version}\n")
 
 
 	if os.path.exists(f"{NFS_SDK_PATH}/{ERROR_FILE_NAME}"):
  
 		os.remove(f"{NFS_SDK_PATH}/{ERROR_FILE_NAME}")
  
+	print(f"sdk_crawling complete")
 
 except Exception as e:
 	
