@@ -381,7 +381,7 @@ done
 """
 
 
-with open("download.sh", "r", encoding="utf-8") as f:
+with open("download", "r", encoding="utf-8") as f:
     r = f.read()
    
 
@@ -393,8 +393,8 @@ with open("download.sh", "r", encoding="utf-8") as f:
     r = r.replace("{{ PYTHON_VERSIONS }}", str(PYTHON_VERSIONS))
     
     
-    with open("download.sh", "w", encoding="utf-8") as f:
-        f.write(r)
+with open("download.sh", "w", encoding="utf-8") as f:
+    f.write(r)
 
 # Windows에서는 chmod가 필요하지 않음
 if os.name != 'nt':  # Unix/Linux/Mac
