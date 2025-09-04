@@ -97,7 +97,7 @@ docker run \\
 			--device /dev/rsd0 \\
 			\$DEVICE_OPTIONS \\
 			--volume /usr/local/bin/rbln-stat:/usr/local/bin/rbln-stat \\
-            --volume /root/.cache:/root/.cache \\
+			--volume /root/.cache:/root/.cache \\
 			-ti ubuntu-rebellions:$RELEASE_VALUE
 EOF
 
@@ -109,8 +109,8 @@ echo "Docker 이미지 tar 파일과 docker_run.sh를 하나의 파일로 압축
 tar -czf ubuntu-rebellions.$RELEASE_VALUE.tar.gz ubuntu-rebellions.$RELEASE_VALUE.tar docker_run.sh docker_load.sh
 
 if [ $? -ne 0 ]; then
-    echo "Error: 파일 압축에 실패했습니다."
-    exit 1
+	echo "Error: 파일 압축에 실패했습니다."
+	exit 1
 fi
 
 echo "ubuntu-rebellions.$RELEASE_VALUE.tar.gz 파일이 생성되었습니다."
@@ -125,8 +125,8 @@ rm $NFS_SDK_PATH/Dockerfile
 rm $NFS_SDK_PATH/resnet_test.sh
 
 if [ $? -ne 0 ]; then
-    echo "Error: Dockerfile 삭제에 실패했습니다."
-    exit 1
+	echo "Error: Dockerfile 삭제에 실패했습니다."
+	exit 1
 fi
 
 
