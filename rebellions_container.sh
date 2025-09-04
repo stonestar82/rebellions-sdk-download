@@ -113,7 +113,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "ubuntu-rebellions-complete.$RELEASE_VALUE.tar.gz 파일이 생성되었습니다."
+echo "ubuntu-rebellions.$RELEASE_VALUE.tar.gz 파일이 생성되었습니다."
 
 # 개별 파일들 삭제 (선택사항)
 echo "개별 파일들을 삭제합니다..."
@@ -134,9 +134,9 @@ fi
 rm -rf /srv/nfs/share/docker/*
 
 ## 최종파일 이동
-mv ubuntu-rebellions-complete.$RELEASE_VALUE.tar.gz /srv/nfs/share/docker/
+mv ubuntu-rebellions.$RELEASE_VALUE.tar.gz /srv/nfs/share/docker/
 
 echo "모든 작업이 완료되었습니다!"
 echo "- 빌드된 이미지: ubuntu-rebellions:$RELEASE_VALUE"
-echo "- 최종 압축 파일: ubuntu-rebellions-complete.$RELEASE_VALUE.tar.gz"
+echo "- 최종 압축 파일: ubuntu-rebellions.$RELEASE_VALUE.tar.gz"
 echo "  (포함: ubuntu-rebellions.$RELEASE_VALUE.tar + docker_run.sh + docker_load.sh)"

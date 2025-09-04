@@ -16,12 +16,17 @@
 ## 📁 프로젝트 구조
 
 ```
-rebellions-sdk-download/
-├── README.md              # 프로젝트 설명서
-├── req.txt                # Python 패키지 의존성
-├── sdk_common.py          # 공통 설정 및 상수
-├── sdk_crawling.py        # 메인 크롤링 스크립트
-└── sdk_init.py            # 초기화 및 스크립트 생성 스크립트
+rebellions-install/
+├── README.md                    # 프로젝트 설명서
+├── req.txt                      # Python 패키지 의존성
+├── sdk_common.py                # 공통 설정 및 상수
+├── sdk_crawling.py              # 메인 크롤링 스크립트
+├── sdk_init.py                  # 초기화 및 스크립트 생성 스크립트
+├── sdk_docker.py                # Dockerfile 생성 스크립트
+├── rebellions_container.sh      # Docker 컨테이너 빌드 및 패키징 스크립트
+├── dockerfile_template          # Dockerfile 템플릿
+├── docker_run.sh                # Docker 컨테이너 실행 스크립트
+└── resnet_test.sh               # ResNet 테스트 스크립트
 ```
 
 ## ⚙️ 환경 설정
@@ -38,7 +43,47 @@ rebellions-sdk-download/
 
 ## 🎯 사용 방법
 
-### 1. 초기 설정 (최초 1회)
+### 1. Docker 컨테이너 빌드 및 패키징
+
+```bash
+./rebellions_container.sh
+```
+
+**동작 과정:**
+
+1. NFS 경로에서 Dockerfile 및 release_info.txt 확인
+2. 기존 ubuntu-rebellions 이미지 삭제
+3. release_info.txt에서 버전 정보 추출
+4. Docker 이미지 빌드 (`ubuntu-rebellions:<version>`)
+5. Docker 이미지를 tar 파일로 저장
+6. docker_run.sh 및 docker_load.sh 스크립트 생성
+7. 최종 패키지 압축 (`ubuntu-rebellions-complete.<version>.tar.gz`)
+
+**생성되는 파일들:**
+
+- `ubuntu-rebellions-complete.<version>.tar.gz`: 최종 배포 패키지
+  - `ubuntu-rebellions.<version>.tar`: Docker 이미지
+  - `docker_run.sh`: 컨테이너 실행 스크립트
+  - `docker_load.sh`: 이미지 로드 스크립트
+
+### 2. Docker 컨테이너 실행
+
+```bash
+# 이미지 로드
+./docker_load.sh
+
+# 컨테이너 실행 (디바이스 개수 지정: 1-16)
+./docker_run.sh 4
+```
+
+**Docker 실행 옵션:**
+
+- `--device /dev/rsd0`: 시스템 디바이스
+- `--device /dev/rbln0 ~ /dev/rbln15`: 리벨리온 디바이스 (지정된 개수만큼)
+- `--volume /usr/local/bin/rbln-stat:/usr/local/bin/rbln-stat`: 통계 도구
+- `--volume /root/.cache:/root/.cache`: 캐시 디렉토리
+
+### 3. 초기 설정 (최초 1회)
 
 ```bash
 python sdk_init.py
@@ -55,7 +100,7 @@ python sdk_init.py
 2. 각 가상환경에 필요한 패키지 설치 (`req.txt` 기반)
 3. SDK 다운로드 및 설치 스크립트 생성
 
-### 2. 가상환경 초기화
+### 4. 가상환경 초기화
 
 ```bash
 ./sdk_init.sh
@@ -67,7 +112,7 @@ python sdk_init.py
 2. 각 가상환경에 `req.txt`의 패키지 설치
 3. 가상환경별 Python 및 pip 버전 확인
 
-### 3. 자동 실행 (권장)
+### 5. 자동 실행 (권장)
 
 ```bash
 python sdk_crawling.py
@@ -96,7 +141,7 @@ optimum_version=0.8.2
 vllm_version=0.8.2
 ```
 
-### 4. SDK 다운로드
+### 6. SDK 다운로드
 
 ```bash
 ./download.sh
