@@ -54,7 +54,6 @@ COPY --from=builder /usr/local/lib/python3.10/ /usr/local/lib/python3.10/
 COPY resnet_test.sh /workspace/rbln-model-zoo/huggingface/transformers/image-classification/resnet/
 
 # 최종 청소
-RUN rm -rf /root/.cache && \
-		sed -i 's#meta-llama/Llama-3.3-70B-Instruct#/nfs/model/models--meta-llama--Llama-3.1-70B-Instruct#g' /workspace/rbln-model-zoo/huggingface/transformers/text2text-generation/llama/llama3.3-70b/compile.py 
+RUN rm -rf /root/.cache
 
 CMD ["/bin/bash"]

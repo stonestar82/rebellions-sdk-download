@@ -1,8 +1,8 @@
 from sdk_common import DEFAULT_PATH, NFS_SDK_PATH, ERROR_FILE_NAME, REBELLIONS_ID, REBELLIONS_PW, PYTHON_VERSIONS
-import subprocess, os
+import subprocess, os, shutil
 from jinja2 import Template
 
-with open("{NFS_SDK_PATH}/release_info.txt", "r", encoding="utf-8") as f:
+with open(f"{NFS_SDK_PATH}/release_info.txt", "r", encoding="utf-8") as f:
 	r = f.read()
 	release_date = r.split("release=")[1].split("\n")[0].strip()
 	compiler_version = r.split("compiler_version=")[1].split("\n")[0].strip()
@@ -26,4 +26,7 @@ with open("{NFS_SDK_PATH}/release_info.txt", "r", encoding="utf-8") as f:
 
 		with open(f"{NFS_SDK_PATH}/Dockerfile", "w", encoding="utf-8") as f:
 			f.write(t.render(REBELLIONS_SDK=rebellions_sdk))
+   
+		shutil.copy("resnet_test.sh", f"{NFS_SDK_PATH}/resnet_test.sh")
+
   

@@ -402,3 +402,4 @@ print("sdk_init.sh, download.sh create complete")
 
 
 os.system("chmod +x resnet_test.sh")
+os.system("chmod +x rebellions_container.sh")

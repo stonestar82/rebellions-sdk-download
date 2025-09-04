@@ -1,8 +1,10 @@
 #!/bin/bash
 
+NFS_SDK_PATH="/srv/nfs/share/SDK"
+
 # Dockerfile 존재 여부 확인
-if [ ! -f "/srv/nfs/share/SDK/Dockerfile" ]; then
-    echo "Error: /srv/nfs/share/SDK/Dockerfile 파일이 존재하지 않습니다."
+if [ ! -f "$NFS_SDK_PATH/Dockerfile" ]; then
+    echo "Error: $NFS_SDK_PATH/Dockerfile 파일이 존재하지 않습니다."
     exit 1
 fi
 
@@ -17,13 +19,13 @@ echo "기존 ubuntu-rebellions 이미지를 삭제합니다..."
 docker rmi ubuntu-rebellions:$TAG 2>/dev/null || echo "삭제할 ubuntu-rebellions 이미지가 없습니다."
 
 # release_info.txt 파일에서 release 값 추출
-if [ ! -f "/srv/nfs/share/SDK/release_info.txt" ]; then
-    echo "Error: /srv/nfs/share/SDK/release_info.txt 파일이 존재하지 않습니다."
+if [ ! -f "$NFS_SDK_PATH/release_info.txt" ]; then
+    echo "Error: $NFS_SDK_PATH/release_info.txt 파일이 존재하지 않습니다."
     exit 1
 fi
 
 echo "release_info.txt에서 release 값을 추출합니다..."
-RELEASE_VALUE=$(head -n 1 /srv/nfs/share/SDK/release_info.txt | grep -o 'release=[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' | cut -d'=' -f2)
+RELEASE_VALUE=$(head -n 1 $NFS_SDK_PATH/release_info.txt | grep -o 'release=[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' | cut -d'=' -f2)
 
 if [ -z "$RELEASE_VALUE" ]; then
     echo "Error: release 값을 추출할 수 없습니다."
@@ -34,7 +36,7 @@ echo "추출된 release 값: $RELEASE_VALUE"
 
 # Docker 이미지 빌드
 echo "Docker 이미지를 빌드합니다..."
-docker build --no-cache -t ubuntu-rebellions:$RELEASE_VALUE /srv/nfs/share/SDK/
+docker build --no-cache -t ubuntu-rebellions:$RELEASE_VALUE $NFS_SDK_PATH/
 
 if [ $? -ne 0 ]; then
     echo "Error: Docker 이미지 빌드에 실패했습니다."
@@ -95,7 +97,7 @@ docker run \\
 			--device /dev/rsd0 \\
 			\$DEVICE_OPTIONS \\
 			--volume /usr/local/bin/rbln-stat:/usr/local/bin/rbln-stat \\
-            --volume /nfs/model:/nfs/model \\
+            --volume /root/.cache:/root/.cache \\
 			-ti ubuntu-rebellions:$RELEASE_VALUE
 EOF
 
@@ -119,7 +121,8 @@ rm ubuntu-rebellions.$RELEASE_VALUE.tar docker_run.sh docker_load.sh
 
 # Dockerfile 삭제
 echo "Dockerfile을 삭제합니다..."
-rm /srv/nfs/share/SDK/Dockerfile
+rm $NFS_SDK_PATH/Dockerfile
+rm $NFS_SDK_PATH/resnet_test.sh
 
 if [ $? -ne 0 ]; then
     echo "Error: Dockerfile 삭제에 실패했습니다."
@@ -127,7 +130,11 @@ if [ $? -ne 0 ]; then
 fi
 
 
+## 기존 폴더에 파일 삭제
+rm -rf /srv/nfs/share/docker/*
 
+## 최종파일 이동
+mv ubuntu-rebellions-complete.$RELEASE_VALUE.tar.gz /srv/nfs/share/docker/
 
 echo "모든 작업이 완료되었습니다!"
 echo "- 빌드된 이미지: ubuntu-rebellions:$RELEASE_VALUE"
