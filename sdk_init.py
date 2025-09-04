@@ -1,6 +1,7 @@
 from sdk_common import DEFAULT_PATH, NFS_SDK_PATH, ERROR_FILE_NAME, REBELLIONS_ID, REBELLIONS_PW, PYTHON_VERSIONS
 from jinja2 import Template
 import os
+import subprocess
 
 ## 파이썬 버전별로 가상환경 생성
 
@@ -398,3 +399,6 @@ os.system("chmod +x download.sh")
 
 
 print("sdk_init.sh, download.sh create complete")
+
+
+os.system("chmod +x resnet_test.sh")

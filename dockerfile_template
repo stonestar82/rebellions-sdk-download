@@ -1,0 +1,60 @@
+# ---------- builder ----------
+FROM ubuntu:22.04 AS builder
+ENV DEBIAN_FRONTEND=noninteractive PIP_NO_CACHE_DIR=1
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		git ca-certificates \
+		python3.10 python3.10-venv python3-pip \
+		python3.10-dev \
+		&& rm -rf /var/lib/apt/lists/*
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1 && \
+		update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+
+WORKDIR /workspace
+
+# 모델 저장소 (얕은 복제)
+RUN git clone --depth 1 https://github.com/rebellions-sw/rbln-model-zoo.git && \
+		rm -rf /workspace/rbln-model-zoo/.git
+
+# SDK 압축본은 빌드 컨텍스트에 sdk.tar 이름으로 두세요
+COPY {{ REBELLIONS_SDK }} /tmp/sdk.tar
+
+# SDK 설치 (설치 결과물만 나중에 옮길 수 있도록 경로 파악)
+# install_sdk.sh가 /opt/rebellions 같은 고정 경로에 설치한다면,
+# 그 경로를 그대로 다음 스테이지로 복사합니다.
+RUN mkdir -p /workspace/sdk && \
+		tar -xf /tmp/sdk.tar -C /workspace/sdk && \
+		bash -lc "cd /workspace/sdk && ./install_sdk.sh" && \
+		rm -rf /tmp/sdk.tar /workspace/sdk/*.tar /root/.cache
+
+# ---------- runtime ----------
+FROM ubuntu:22.04 AS runtime
+ENV DEBIAN_FRONTEND=noninteractive PIP_NO_CACHE_DIR=1
+
+# 런타임에 필요한 최소 구성만
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		ca-certificates \
+		python3.10 python3-venv python3-pip build-essential jq vim \
+		&& rm -rf /var/lib/apt/lists/*
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1 && \
+		update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+
+WORKDIR /workspace
+
+# 모델 코드만 복사 (빌더에서 만들어 둔 것)
+COPY --from=builder /workspace/rbln-model-zoo /workspace/rbln-model-zoo
+
+# SDK 설치 산출물만 복사
+# install_sdk.sh가 설치한 "실사용 디렉터리" 경로를 확인해서 지정
+# 예: /opt/rebellions, /usr/local/lib/python3.10/site-packages 등
+COPY --from=builder /usr/local/lib/python3.10/ /usr/local/lib/python3.10/
+
+COPY resnet_test.sh /workspace/rbln-model-zoo/huggingface/transformers/image-classification/resnet/
+
+# 최종 청소
+RUN rm -rf /root/.cache && \
+		sed -i 's#meta-llama/Llama-3.3-70B-Instruct#/nfs/model/models--meta-llama--Llama-3.1-70B-Instruct#g' /workspace/rbln-model-zoo/huggingface/transformers/text2text-generation/llama/llama3.3-70b/compile.py 
+
+CMD ["/bin/bash"]
